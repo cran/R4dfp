@@ -1,0 +1,8 @@
+PKG_CPPFLAGS+= -isystem 4dfp -Iinclude
+PKG_LIBS+= 4dfp/endianio.o 4dfp/Getifh.o
+
+.PHONY: all
+
+all: $(SHLIB)
+
+$(SHLIB): 4dfp/endianio.o 4dfp/Getifh.o

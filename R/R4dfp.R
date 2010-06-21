@@ -25,22 +25,8 @@ recycle.4dfp <- function(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
     stop("not a 4dfp image object")
 
   file <- object$file
-  close.4dfp(object,save=save)
+  close.R4dfp(object,save=save)
   return(load.4dfp(file,direct.read=direct.read,direct.write=direct.write))
-}
-
-
-close.4dfp <- function(con,...)
-{
-  if (!inherits(con,"R4dfp"))
-    stop("not a 4dfp image object")
-
-  if (is.null(list(...)$save))
-    save <- FALSE
-  else
-    save <- list(...)$save
-
-  .Call("close_4dfp",con,as.logical(save),PACKAGE="R4dfp")
 }
 
 
@@ -183,6 +169,16 @@ blank.111.4dfp <- function(file="",t=1)
 }
 
 
+is.4dfp <- function(unknown)
+{
+  if (class(unknown)=="R4dfp")
+    return(TRUE) else
+  if (is.character(unknown))
+    return(length(grep('\\.4dfp(\\.ifh|\\.img|)$',unknown))>0) else
+    return(FALSE)
+}
+
+
 print.R4dfp <- function(x,...)
 {
   if (!inherits(x,"R4dfp"))
@@ -203,13 +199,17 @@ print.R4dfp <- function(x,...)
 }
 
 
-is.4dfp <- function(unknown)
+close.R4dfp <- function(con,...)
 {
-  if (class(unknown)=="R4dfp")
-    return(TRUE) else
-  if (is.character(unknown))
-    return(length(grep('\\.4dfp(\\.ifh|\\.img|)$',unknown))>0) else
-    return(FALSE)
+  if (!inherits(con,"R4dfp"))
+    stop("not a 4dfp image object")
+
+  if (is.null(list(...)$save))
+    save <- FALSE
+  else
+    save <- list(...)$save
+
+  .Call("close_4dfp",con,as.logical(save),PACKAGE="R4dfp")
 }
 
 

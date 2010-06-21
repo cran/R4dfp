@@ -29,6 +29,22 @@ SEXP blank_4dfp()
 	R4dfp_object *new_image = calloc(1, sizeof(R4dfp_object));
 	if (!new_image) error("unable to create 4dfp image");
 
+	strcpy(new_image->header.number_format, "float");
+	new_image->header.number_of_bytes_per_pixel = sizeof(float);
+	new_image->header.orientation = 2;
+
+	union {
+	  unsigned char byte;
+	  short         word;
+	} test;
+
+	test.word = 01;
+
+	if (test.byte)
+	strcpy(new_image->header.imagedata_byte_order, "littleendian");
+	else
+	strcpy(new_image->header.imagedata_byte_order, "bigendian");
+
 	return R4dfp_to_R(new_image);
 }
 

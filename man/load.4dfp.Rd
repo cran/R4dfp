@@ -89,7 +89,7 @@ myimage[voxels] <- 0
 \seealso{
   \code{\link{save.4dfp}}
   \code{\link{copy.4dfp}}
-  \code{\link{close.4dfp}}
+  \code{\link{close.R4dfp}}
   \code{\link{recycle.4dfp}}
 }
 \keyword{utilities}

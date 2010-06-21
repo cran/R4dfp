@@ -27,7 +27,7 @@ Attempts to save the specified 4dfp image using the header name in
 \seealso{
   \code{\link{load.4dfp}}
   \code{\link{copy.4dfp}}
-  \code{\link{close.4dfp}}
+  \code{\link{close.R4dfp}}
   \code{\link{recycle.4dfp}}
 }
 \keyword{utilities}

@@ -11,7 +11,7 @@
 
 #include <Rdefines.h>
 
-#include <Getifh.h>
+#include "Getifh.h"
 
 #define CEILING_TO(val,denom) ( ((val) % (denom))? (((val) / (denom) + 1) * denom) : (val) )
 #define HEADER_EXT ".ifh"
@@ -102,8 +102,8 @@ R4dfp_object *R4dfp_load(const char *fFile, int oOptions)
 	if (image_stat.st_size != expected_size * sizeof(float))
 	 {
 	fprintf(stderr, "image data size (%i) doesn't match dimensions given in image header ([%i,%i,%i,%i]=%i)\n",
-	  image_stat.st_size / sizeof(float), new_image->header.matrix_size[0], new_image->header.matrix_size[1],
-	  new_image->header.matrix_size[2], new_image->header.matrix_size[3], expected_size);
+	  (int) (image_stat.st_size / sizeof(float)), new_image->header.matrix_size[0], new_image->header.matrix_size[1],
+	  new_image->header.matrix_size[2], new_image->header.matrix_size[3], (int) expected_size);
 	close(image);
 	R4dfp_free(new_image);
 	return NULL;
@@ -308,6 +308,7 @@ void R4dfp_update_file(SEXP oObject)
 void R4dfp_clear(SEXP oObject)
 {
 	R_ClearExternalPtr(VECTOR_ELT(oObject, R4DFP_INTERNAL));
+	SET_VECTOR_ELT(oObject, R4DFP_INTERNAL, R_MakeExternalPtr(NULL, R_NilValue, R_NilValue));
 	SET_VECTOR_ELT(oObject, R4DFP_INTERNAL,   R_NilValue);
 	SET_VECTOR_ELT(oObject, R4DFP_FILE,       R_NilValue); /*file*/
 	SET_VECTOR_ELT(oObject, R4DFP_DIM,        R_NilValue); /*dim*/

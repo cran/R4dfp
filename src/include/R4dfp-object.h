@@ -5,7 +5,7 @@
 
 #include <Rinternals.h>
 
-#include <ifh.h>
+#include "ifh.h"
 
 #define R4DFP_INTERNAL 0
 #define R4DFP_FILE     1

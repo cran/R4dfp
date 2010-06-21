@@ -4,13 +4,13 @@ export(
   load.4dfp,
   save.4dfp,
   recycle.4dfp,
-  close.4dfp,
   copy.4dfp,
   blank.4dfp,
   blank.333.4dfp,
   blank.111.4dfp,
-  print.R4dfp,
   is.4dfp,
+  print.R4dfp,
+  close.R4dfp,
   voxel.to.coord.4dfp,
   coord.to.voxel.4dfp)
 

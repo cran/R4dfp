@@ -47,7 +47,7 @@ myimage <- recycle.4dfp(myimage,direct.write=TRUE)
   \code{\link{load.4dfp}}
   \code{\link{save.4dfp}}
   \code{\link{copy.4dfp}}
-  \code{\link{close.4dfp}}
+  \code{\link{close.R4dfp}}
 }
 \keyword{utilities}
 \keyword{data}

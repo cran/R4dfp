@@ -76,8 +76,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <ifh.h>
-#include <endianio.h>
+#include "ifh.h"
+#include "endianio.h"
 
 #define MAXL	256
 
@@ -97,7 +97,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 		fprintf (stderr, "Getifh: %s read error\n", ifhfile);
 		return -1;
 	}
-	if (0) printf ("Reading: %s\n", ifhfile);	/* stdout messages can be a problem */ 
+	if (0) printf ("Reading: %s\n", ifhfile);	/* stdout messages can be a problem */
 	memset (ifhdr, '\0', sizeof (IFH));
 	memset (line, '\0', MAXL);
 	while (fgets (line, MAXL, fp)) {
@@ -137,7 +137,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 		if (strstr (line, "matrix size")) {
 			if (!(str = strchr (line, '['))) goto ERR;
 			sscanf (str, "[%d]", &i);
-			if (i < 1 || i > 4) goto ERR;		
+			if (i < 1 || i > 4) goto ERR;
 			ifhdr->matrix_size[i-1] = atoi (parameter);
 		}
 		if (strstr (line, "orientation")) {
@@ -146,7 +146,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 		if (strstr (line, "scaling factor (mm/pixel)")) {
 			if (!(str = strchr (line, '['))) goto ERR;
 			sscanf (str, "[%d]", &i);
-			if (i < 1 || i > 4) goto ERR;		
+			if (i < 1 || i > 4) goto ERR;
 			ifhdr->scaling_factor[i-1] = atof (parameter);
 		}
 		if (strstr (line, "center")) {
@@ -175,7 +175,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 	}
 
 	return 0;
-ERR:	if ((str = strrchr (parameter, '\n'))) *str = '\0'; 
+ERR:	if ((str = strrchr (parameter, '\n'))) *str = '\0';
 	fprintf (stderr, ">>> %s := %s <<<\n", line, parameter);
 	return -1;
 }

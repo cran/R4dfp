@@ -34,7 +34,7 @@ coord <- voxel.to.coord.4dfp(myimage,c(1,1,1))
   \code{\link{coord.to.voxel.4dfp}}
   \code{\link{load.4dfp}}
   \code{\link{save.4dfp}}
-  \code{\link{close.4dfp}}
+  \code{\link{close.R4dfp}}
   \code{\link{recycle.4dfp}}
 }
 \keyword{utilities}

@@ -1,5 +1,5 @@
-\name{close.4dfp}
-\alias{close.4dfp}
+\name{close.R4dfp}
+\alias{close.R4dfp}
 \title{Close a 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -7,7 +7,7 @@ Snyder <avi@npg.wustl.edu>}
 Closes a loaded 4dfp MRI image.
 }
 \usage{
-close.4dfp(con,...)
+close.R4dfp(con,...)
 }
 \arguments{
   \item{con}{
@@ -28,7 +28,7 @@ will invalidate the \sQuote{R4dfp} provided.
 \examples{
 #create a new image and close it
 myimage <- blank.333.4dfp("myimage.4dfp.ifh")
-myimage <- close.4dfp(myimage,save=TRUE)
+myimage <- close.R4dfp(myimage,save=TRUE)
 }
 \references{
 }

@@ -16,7 +16,7 @@
  * Initial revision
  **/
 /********************************************************************************************/
-/* Copyright 2006 		            						    */	
+/* Copyright 2006 		            						    */
 /* Washington University, Mallinckrodt Institute of Radiology.                              */
 /* All Rights Reserved.                                                                     */
 /* This software may not be reproduced, copied, or distributed without written              */
@@ -27,8 +27,8 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
-#include <ANALYZE.h>
-#include <Getifh.h>
+#include "ANALYZE.h"
+#include "Getifh.h"
 
 #define MAXL		256
 

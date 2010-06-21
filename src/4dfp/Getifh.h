@@ -14,7 +14,7 @@
  * Initial revision
  **/
 
-#include <ifh.h>
+#include "ifh.h"
 
 /************************************************************************/
 /* read IFH file associated with imgfile and populate the IFH structure */
@@ -29,7 +29,7 @@ extern int Writeifh 	(char *program, char *outfile, IFH *ifhdr, char control);
 /***************************************************************************/
 /* write IFH file using passed arguments omitting mmppix and center values */
 /***************************************************************************/
-extern int writeifhe 	(char *program, char *outfile, int *imgdim, float *voxdim, int orient, char control); 
+extern int writeifhe 	(char *program, char *outfile, int *imgdim, float *voxdim, int orient, char control);
 
 /****************************************************************/
 /* writeifhe() functionality including mmppix and center values */

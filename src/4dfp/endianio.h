@@ -11,7 +11,7 @@
  * Initial revision
  **/
 
-#include <ANALYZE.h>
+#include "ANALYZE.h"
 
 extern void 	swab2 			(char *a);
 extern void 	swab4 			(char *a);

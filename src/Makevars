@@ -1,5 +1,5 @@
-PKG_CPPFLAGS+= -isystem 4dfp -Iinclude
-PKG_LIBS+= 4dfp/endianio.o 4dfp/Getifh.o
+PKG_CFLAGS=-I4dfp -Iinclude
+PKG_LIBS=4dfp/endianio.o 4dfp/Getifh.o
 
 .PHONY: all
 

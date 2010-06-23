@@ -1,3 +1,5 @@
+/* Kevin P. Barry [ta0kira@users.berlios.de], BMCLAB, 23 Jun 2010 */
+
 #ifndef R4dfp_object_h
 #define R4dfp_object_h
 

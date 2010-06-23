@@ -1,3 +1,5 @@
+/* Kevin P. Barry [ta0kira@users.berlios.de], BMCLAB, 23 Jun 2010 */
+
 #include "R4dfp-object.h"
 
 #include <string.h>

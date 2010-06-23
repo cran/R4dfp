@@ -1,3 +1,5 @@
+# Kevin P. Barry [ta0kira@users.berlios.de], BMCLAB, 23 Jun 2010
+
 load.4dfp <- function(file,direct.read=FALSE,direct.write=FALSE)
 {
   direct.read <- direct.read||direct.write

@@ -1,3 +1,6 @@
+/*kevin p. barry [23 jun 2010] removed 'printf' for info messages*/
+/*kevin p. barry [21 jun 2010] removed <> for local includes*/
+
 /****************************************************************************************/
 /* Copyright 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007			*/
 /* Washington University, Mallinckrodt Institute of Radiology.				*/
@@ -82,7 +85,7 @@
 #define MAXL	256
 
 static char	rcsid[] = "$Id: Getifh.c,v 1.21 2007/05/03 22:27:28 avi Exp $";
-void Getifh_rcs (void) {printf ("%s\n", rcsid);}
+void Getifh_rcs (void) {fprintf (stderr, "%s\n", rcsid);}
 
 int Getifh (char *imgfile, IFH *ifhdr) {
 	FILE	*fp;
@@ -97,7 +100,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 		fprintf (stderr, "Getifh: %s read error\n", ifhfile);
 		return -1;
 	}
-	if (0) printf ("Reading: %s\n", ifhfile);	/* stdout messages can be a problem */
+	if (0) fprintf (stderr, "Reading: %s\n", ifhfile);	/* stdout messages can be a problem */
 	memset (ifhdr, '\0', sizeof (IFH));
 	memset (line, '\0', MAXL);
 	while (fgets (line, MAXL, fp)) {
@@ -110,7 +113,7 @@ int Getifh (char *imgfile, IFH *ifhdr) {
 		strcpy (parameter, str);
 
 		for (i = 0; i < strlen (line); i++) line[i] = tolower (line[i]);
-		if (debug) printf ("%s\t%s\n", line, parameter);
+		if (debug) fprintf (stderr, "%s\t%s\n", line, parameter);
 
 		if (strstr (line, "version of keys")) {
 			strncpy (ifhdr->version_of_keys,	parameter, 31);
@@ -190,7 +193,7 @@ int Writeifh (char *program, char *outfile, IFH *ifhdr, char control) {
 	getroot (outfile, ifhfile);
 	strcat (ifhfile, ".4dfp.ifh");
 	if (!(ifhfp = fopen (ifhfile, "w"))) return -1;
-	printf ("Writing: %s\n", ifhfile);
+	fprintf (stderr, "Writing: %s\n", ifhfile);
 
 	fprintf (ifhfp, "INTERFILE	:=\n");
 	fprintf (ifhfp, "version of keys	:= %s\n", ifhdr->version_of_keys);
@@ -223,7 +226,7 @@ int writeifhe (char *program, char *outfile, int *imgdim, float *voxdim, int ori
 	getroot (outfile, ifhfile);
 	strcat (ifhfile, ".4dfp.ifh");
 	if (!(ifhfp = fopen (ifhfile, "w"))) return -1;
-	printf ("Writing: %s\n", ifhfile);
+	fprintf (stderr, "Writing: %s\n", ifhfile);
 
 	fprintf (ifhfp, "INTERFILE	:=\n");
 	fprintf (ifhfp, "version of keys	:= 3.3\n");
@@ -287,7 +290,7 @@ int writeifhmce (char *program, char *outfile, int *imgdim, float *voxdim, int o
 	getroot (outfile, ifhfile);
 	strcat (ifhfile, ".4dfp.ifh");
 	if (!(ifhfp = fopen (ifhfile, "w"))) return -1;
-	printf ("Writing: %s\n", ifhfile);
+	fprintf (stderr, "Writing: %s\n", ifhfile);
 
 	fprintf (ifhfp, "INTERFILE	:=\n");
 	fprintf (ifhfp, "version of keys	:= 3.3\n");

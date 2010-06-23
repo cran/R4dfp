@@ -1,3 +1,6 @@
+/*kevin p. barry [23 jun 2010] removed 'printf' for info messages*/
+/*kevin p. barry [21 jun 2010] removed <> for local includes*/
+
 /*$Header: /data/petsun4/data1/src_solaris/TRX/RCS/endianio.c,v 1.5 2007/08/04 23:43:05 avi Exp $*/
 /*$Log: endianio.c,v $
  * Revision 1.5  2007/08/04  23:43:05  avi
@@ -33,7 +36,7 @@
 #define MAXL		256
 
 static char rcsid[] = "$Id: endianio.c,v 1.5 2007/08/04 23:43:05 avi Exp $";
-void endianio_rcs (void) {printf ("%s\n", rcsid);}
+void endianio_rcs (void) {fprintf (stderr, "%s\n", rcsid);}
 
 void swab2 (char *a) {
 	char	t;
@@ -122,7 +125,7 @@ int eread (float *imgt, int n, int isbig, FILE *fp) {
 	int	i, swab_flag;
 
 	swab_flag = (CPU_is_bigendian() != 0) != (isbig != 0);
-	if (0) printf ("eread swab_flag=%d\n", swab_flag);
+	if (0) fprintf (stderr, "eread swab_flag=%d\n", swab_flag);
 	if (fread (imgt, sizeof (float), n, fp) != n) return -1;
 	if (swab_flag) for (i = 0; i < n; i++) swab4 ((char *) (imgt + i));
 
@@ -136,7 +139,7 @@ int ewrite (float *imgt, int n, char control, FILE *fp) {
 	swab_flag = ((CPU_is_bigendian() != 0) && (control == 'l' || control == 'L'))
 		 || ((CPU_is_bigendian() == 0) && (control == 'b' || control == 'B'));
 
-	if (0) printf ("ewrite swab_flag=%d\n", swab_flag);
+	if (0) fprintf (stderr, "ewrite swab_flag=%d\n", swab_flag);
 	if (swab_flag) {
 		for (i = 0; i < n; i++) {
 			f = imgt[i];
@@ -153,7 +156,7 @@ int gread (char *imgt, size_t bytes, int n, FILE *fp, int isbig) {
 	int	i, swab_flag;
 
 	swab_flag = (CPU_is_bigendian() != 0) != (isbig != 0);
-	if (0) printf ("gread swab_flag=%d\n", swab_flag);
+	if (0) fprintf (stderr, "gread swab_flag=%d\n", swab_flag);
 
 	if (fread (imgt, bytes, n, fp) != n) return -1;
 	if (swab_flag) for (i = 0; i < n; i++) switch (bytes) {
@@ -171,7 +174,7 @@ int gwrite (char *imgt, size_t bytes, int n, FILE *fp, char control) {
 
 	swab_flag = ((CPU_is_bigendian() != 0) && (control == 'l' || control == 'L'))
 		 || ((CPU_is_bigendian() == 0) && (control == 'b' || control == 'B'));
-	if (0) printf ("gwrite swab_flag=%d\n", swab_flag);
+	if (0) fprintf (stderr, "gwrite swab_flag=%d\n", swab_flag);
 
 	status = 0;
 	if (swab_flag) {
@@ -272,32 +275,32 @@ void eread_ewrite_test () {
 	int	i, n = N;
 	float	*x, *y;
 
-	printf ("CPU_is_bigendian=%d\n", CPU_is_bigendian ());
+	fprintf (stderr, "CPU_is_bigendian=%d\n", CPU_is_bigendian ());
 
 	if (!(x = (float *) malloc (n * sizeof (float)))) errm (program);
 	if (!(y = (float *) malloc (n * sizeof (float)))) errm (program);
 	for (i = 0; i < n; i++) {
 		x[i] = -1. + 2.0*rand ()/(float) RAND_MAX;
-		if (i < 20) printf ("%10d%10.4f\n", i, x[i]);
+		if (i < 20) fprintf (stderr, "%10d%10.4f\n", i, x[i]);
 	}
 
-	printf ("Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "wb")))		errw (program, filespc);
 	if (ewrite (x, n, 'b', fp) || fclose (fp))	errw (program, filespc);
-	printf ("Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "rb")))		errr (program, filespc);
 	if (eread (y, n, 1, fp) || fclose (fp))		errr (program, filespc);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	printf ("Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "wb")))		errw (program, filespc);
 	if (ewrite (x, n, 'l', fp) || fclose (fp))	errw (program, filespc);
-	printf ("Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "rb")))		errr (program, filespc);
 	if (eread (y, n, 0, fp) || fclose (fp))		errr (program, filespc);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	printf ("Done\n"); fflush (stdout);
+	fprintf (stderr, "Done\n"); fflush (stdout);
 	free (x); free (y);
 }
 
@@ -308,33 +311,33 @@ void gread_gwrite_test () {
 	int	i, n = N;
 	float	*x, *y;
 
-	printf ("CPU_is_bigendian=%d\n", CPU_is_bigendian ());
+	fprintf (stderr, "CPU_is_bigendian=%d\n", CPU_is_bigendian ());
 
 	if (!(x = (float *) malloc (n * sizeof (float)))) errm (program);
 	if (!(y = (float *) malloc (n * sizeof (float)))) errm (program);
 	for (i = 0; i < n; i++) {
 		x[i] = -1. + 2.0*rand ()/(float) RAND_MAX;
-		if (i < 20) printf ("%10d%10.4f\n", i, x[i]);
+		if (i < 20) fprintf (stderr, "%10d%10.4f\n", i, x[i]);
 	}
 
-	printf ("Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "wb")))					errw (program, filespc);
 	if (gwrite ((char *) x, sizeof (float), n, fp, 'b') || fclose (fp))	errw (program, filespc);
-	printf ("Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "rb")))					errr (program, filespc);
 	if (gread  ((char *) y, sizeof (float), n, fp, 1) || fclose (fp))	errr (program, filespc);
-	if (0) for (i = 0; i < n; i++) printf ("%10f%10f\n", x[i], y[i]);
+	if (0) for (i = 0; i < n; i++) fprintf (stderr, "%10f%10f\n", x[i], y[i]);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	printf ("Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "wb")))					errw (program, filespc);
 	if (gwrite ((char *) x, sizeof (float), n, fp, 'l') || fclose (fp))	errw (program, filespc);
-	printf ("Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
 	if (!(fp = fopen (filespc, "rb")))					errr (program, filespc);
 	if (gread  ((char *) y, sizeof (float), n, fp, 0) || fclose (fp))	errr (program, filespc);
-	if (0) for (i = 0; i < n; i++) printf ("%10f%10f\n", x[i], y[i]);
+	if (0) for (i = 0; i < n; i++) fprintf (stderr, "%10f%10f\n", x[i], y[i]);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	printf ("Done\n"); fflush (stdout);
+	fprintf (stderr, "Done\n"); fflush (stdout);
 	free (x); free (y);
 }

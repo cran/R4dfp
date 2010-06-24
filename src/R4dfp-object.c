@@ -67,7 +67,7 @@ R4dfp_object *R4dfp_load(const char *fFile, int oOptions)
 	new_image->header = header;
 	new_image->file   = header_file; /*('new_image' now owns the pointer)*/
 
-	ssize_t expected_size = new_image->header.matrix_size[0] * new_image->header.matrix_size[1] *
+	long expected_size = new_image->header.matrix_size[0] * new_image->header.matrix_size[1] *
 	  new_image->header.matrix_size[2] * new_image->header.matrix_size[3];
 
 

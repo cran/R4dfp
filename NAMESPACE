@@ -9,6 +9,7 @@ export(
   blank.333.4dfp,
   blank.111.4dfp,
   is.4dfp,
+  is.R4dfp,
   print.R4dfp,
   close.R4dfp,
   voxel.to.coord.4dfp,

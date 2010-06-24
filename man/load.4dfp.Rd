@@ -2,6 +2,7 @@
 \alias{load.4dfp}
 \alias{print.R4dfp}
 \alias{is.4dfp}
+\alias{is.R4dfp}
 \title{Read a 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -12,6 +13,7 @@ Returns a loaded 4dfp MRI image, either loaded or memory-mapped.
 load.4dfp(file,direct.read=FALSE,direct.write=FALSE)
 print.R4dfp(x,...)
 is.4dfp(unknown)
+is.R4dfp(object)
 }
 \arguments{
   \item{file}{
@@ -30,6 +32,9 @@ is.4dfp(unknown)
   \item{unknown}{
   An object to check for class \sQuote{R4dfp} or a string to check for 4dfp
   file-name format.
+  }
+  \item{object}{
+  An object to check for class \sQuote{R4dfp}.
   }
   \item{...}{
   Other things.
@@ -60,8 +65,10 @@ Voxel access is via the \code{[...]} operator:
     \code{myimage[c(1,2,4),1,1]}.
     \item To access a list of specific voxels, use a single Nx4 matrix.
     \item To access the time-series of a list of specific voxels, use a single
-    Nx3 matrix. Optionally, provide a \code{t} argument to specify specific
-    frames.
+    Nx3 matrix. Optionally, provide a \code{t} argument to specify frames.
+    \item Use a 3- or 4-D logical matrix to choose specific voxels, e.g.
+    \code{myimage[myimage[,,,]==NaN] <- 0}. Optionally, provide a \code{t} argument
+    to specify specific frames with a 3-D matrix.
   }
 }
 \examples{
@@ -83,6 +90,12 @@ voxels <- rbind(voxels,c(1,1,2))
 voxels <- rbind(voxels,c(1,2,1))
 voxels <- rbind(voxels,c(1,2,2))
 myimage[voxels] <- 0
+
+#set all voxels to something random
+myimage[,,,] <- array(rnorm(prod(myimage$dims)),myimage$dims)
+
+#set everything less than 0 to 0
+myimage[myimage[,,,]<0] <- 0
 }
 \references{
 }

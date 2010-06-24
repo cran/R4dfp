@@ -202,7 +202,7 @@ void load_4dfp_frame (char *fileroot, int *imgdim, int frame, int isbig, float *
 	vdim = imgdim[0]*imgdim[1]*imgdim[2];
 
 	sprintf (filespc, "%s.4dfp.img", fileroot);
-	fprintf (stdout, "Reading: %s frame %d\n", filespc, frame + 1);
+	fprintf (stderr, "Reading: %s frame %d\n", filespc, frame + 1);
 	if (!(fp = fopen (filespc, "rb")) || fseek (fp, (long) frame * vdim * sizeof (float), SEEK_SET)
 	|| fread (fimg, sizeof (float), vdim, fp) != vdim || fclose (fp)) errr (subr, filespc);
 
@@ -219,7 +219,7 @@ int get_4dfp_dimoe (char *fileroot, int *imgdim, float *voxsiz, int *orient, int
 
 	getroot (fileroot, filespc);
 	if ((i = strlen (filespc)) + 10 > MAXL) {
-		fprintf (stdout, "%s: %s filename too long\n", subr, fileroot);
+		fprintf (stderr, "%s: %s filename too long\n", subr, fileroot);
 		return -1;
 	}
 
@@ -228,15 +228,15 @@ int get_4dfp_dimoe (char *fileroot, int *imgdim, float *voxsiz, int *orient, int
 	for (k = 0; k < 3; k++) voxsiz[k] = ifh.scaling_factor[k];
 	for (k = 0; k < 4; k++) imgdim[k] = ifh.matrix_size[k];
 
-	fprintf (stdout, "%s\n", fileroot);
-	fprintf (stdout, "%10d%10d%10d%10d\n", imgdim[0], imgdim[1], imgdim[2], imgdim[3]);
-	fprintf (stdout, "%10f%10f%10f\n", voxsiz[0], voxsiz[1], voxsiz[2]);
+	fprintf (stderr, "%s\n", fileroot);
+	fprintf (stderr, "%10d%10d%10d%10d\n", imgdim[0], imgdim[1], imgdim[2], imgdim[3]);
+	fprintf (stderr, "%10f%10f%10f\n", voxsiz[0], voxsiz[1], voxsiz[2]);
 	*orient = ifh.orientation;
 	if (*orient < 2 || *orient > 4) {
 		fprintf (stderr, "%s warning: %s illegal orientation (%d)\n", subr, fileroot, ifh.orientation);
 		status = -2;
 	} else {
-		fprintf (stdout, "orientation %s byte_order %s\n", TCS[*orient - 2], ifh.imagedata_byte_order);
+		fprintf (stderr, "orientation %s byte_order %s\n", TCS[*orient - 2], ifh.imagedata_byte_order);
 	}
 	*isbig = !strcmp (ifh.imagedata_byte_order, "bigendian");
 	return status;
@@ -284,23 +284,23 @@ void eread_ewrite_test () {
 		if (i < 20) fprintf (stderr, "%10d%10.4f\n", i, x[i]);
 	}
 
-	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "wb")))		errw (program, filespc);
 	if (ewrite (x, n, 'b', fp) || fclose (fp))	errw (program, filespc);
-	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "rb")))		errr (program, filespc);
 	if (eread (y, n, 1, fp) || fclose (fp))		errr (program, filespc);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "wb")))		errw (program, filespc);
 	if (ewrite (x, n, 'l', fp) || fclose (fp))	errw (program, filespc);
-	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "rb")))		errr (program, filespc);
 	if (eread (y, n, 0, fp) || fclose (fp))		errr (program, filespc);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	fprintf (stderr, "Done\n"); fflush (stdout);
+	fprintf (stderr, "Done\n"); fflush (stderr);
 	free (x); free (y);
 }
 
@@ -320,24 +320,24 @@ void gread_gwrite_test () {
 		if (i < 20) fprintf (stderr, "%10d%10.4f\n", i, x[i]);
 	}
 
-	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "wb")))					errw (program, filespc);
 	if (gwrite ((char *) x, sizeof (float), n, fp, 'b') || fclose (fp))	errw (program, filespc);
-	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "rb")))					errr (program, filespc);
 	if (gread  ((char *) y, sizeof (float), n, fp, 1) || fclose (fp))	errr (program, filespc);
 	if (0) for (i = 0; i < n; i++) fprintf (stderr, "%10f%10f\n", x[i], y[i]);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	fprintf (stderr, "Writing: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Writing: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "wb")))					errw (program, filespc);
 	if (gwrite ((char *) x, sizeof (float), n, fp, 'l') || fclose (fp))	errw (program, filespc);
-	fprintf (stderr, "Reading: %s\n", filespc); fflush (stdout);
+	fprintf (stderr, "Reading: %s\n", filespc); fflush (stderr);
 	if (!(fp = fopen (filespc, "rb")))					errr (program, filespc);
 	if (gread  ((char *) y, sizeof (float), n, fp, 0) || fclose (fp))	errr (program, filespc);
 	if (0) for (i = 0; i < n; i++) fprintf (stderr, "%10f%10f\n", x[i], y[i]);
 	for (i = 0; i < n; i++) assert (y[i] == x[i]);
 
-	fprintf (stderr, "Done\n"); fflush (stdout);
+	fprintf (stderr, "Done\n"); fflush (stderr);
 	free (x); free (y);
 }

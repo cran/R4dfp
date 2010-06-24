@@ -19,9 +19,9 @@
 
 typedef struct
 {
-	float      *array;
-	ssize_t     size, msize, psize;
-	int         mtype, swap;
+	float *array;
+	long   size, msize, psize;
+	int    mtype, swap;
 } R4dfp_data;
 
 

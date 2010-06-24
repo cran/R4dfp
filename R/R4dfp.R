@@ -14,7 +14,7 @@ load.4dfp <- function(file,direct.read=FALSE,direct.write=FALSE)
 
 save.4dfp <- function(object)
 {
-  if (!inherits(object,"R4dfp"))
+  if (!is.R4dfp(object))
     stop("not a 4dfp image object")
 
   .Call("save_4dfp",object,PACKAGE="R4dfp")
@@ -23,7 +23,7 @@ save.4dfp <- function(object)
 
 recycle.4dfp <- function(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
 {
-  if (!inherits(object,"R4dfp"))
+  if (!is.R4dfp(object))
     stop("not a 4dfp image object")
 
   file <- object$file
@@ -34,7 +34,7 @@ recycle.4dfp <- function(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
 
 copy.4dfp <- function(object,file="")
 {
-  if (!inherits(object,"R4dfp"))
+  if (!is.R4dfp(object))
     stop("not a 4dfp image object")
 
   new.image <- .Call("blank_4dfp",PACKAGE="R4dfp")
@@ -79,16 +79,29 @@ blank.111.4dfp <- function(file="",t=1)
 }
 
 
+voxels.4dfp <- function(mask,dims)
+{
+  linear <- which(mask)
+
+  if (length(dims)==3||dims[4]==1)
+    return(cbind(
+      floor(((linear-1)%%dims[1])),
+      floor(((linear-1)/dims[1])%%dims[2]),
+      floor(((linear-1)/prod(dims[1:2]))%%dims[3])
+    )+1) else
+    return(cbind(
+      floor(((linear-1)%%dims[1])),
+      floor(((linear-1)/dims[1])%%dims[2]),
+      floor(((linear-1)/prod(dims[1:2]))%%dims[3]),
+      floor(((linear-1)/prod(dims[1:3]))%%dims[4])
+    )+1)
+}
+
+
 "[.R4dfp" <- function(object,X=1:object$dims[1],Y=1:object$dims[2],Z=1:object$dims[3],t=1:object$dims[4])
 {
-  if (is.logical(X))
-    X <- which(X)
-  if (is.logical(Y))
-    Y <- which(Y)
-  if (is.logical(Z))
-    Z <- which(Z)
-  if (is.logical(t))
-    t <- which(t)
+  if ((length(dim(X)==3)||length(dim(X)==4))&&is.logical(X))
+    X <- voxels.4dfp(X,dim(X))
 
   image.data <- .Call("read_voxels_4dfp",object,X-1,Y-1,Z-1,t-1,PACKAGE="R4dfp")
 
@@ -106,14 +119,8 @@ blank.111.4dfp <- function(file="",t=1)
 
 "[<-.R4dfp" <- function(object,X=1:object$dims[1],Y=1:object$dims[2],Z=1:object$dims[3],t=1:object$dims[4],value)
 {
-  if (is.logical(X))
-    X <- which(X)
-  if (is.logical(Y))
-    Y <- which(Y)
-  if (is.logical(Z))
-    Z <- which(Z)
-  if (is.logical(t))
-    t <- which(t)
+  if ((length(dim(X)==3)||length(dim(X)==4))&&is.logical(X))
+    X <- voxels.4dfp(X,dim(X))
 
   if (length(value)!=1)
   {
@@ -173,11 +180,17 @@ blank.111.4dfp <- function(file="",t=1)
 
 is.4dfp <- function(unknown)
 {
-  if (class(unknown)=="R4dfp")
+  if (is.R4dfp(unknown))
     return(TRUE) else
   if (is.character(unknown))
     return(length(grep('\\.4dfp(\\.ifh|\\.img|)$',unknown))>0) else
     return(FALSE)
+}
+
+
+is.R4dfp <- function(object)
+{
+  return(inherits(object,"R4dfp"))
 }
 
 
@@ -217,7 +230,7 @@ close.R4dfp <- function(con,...)
 
 voxel.to.coord.4dfp <- function(object,voxel)
 {
-  if (!inherits(object,"R4dfp"))
+  if (!is.R4dfp(object))
     stop("not a 4dfp image object")
 
   if (is.null(ncol(voxel)))
@@ -235,7 +248,7 @@ voxel.to.coord.4dfp <- function(object,voxel)
 
 coord.to.voxel.4dfp <- function(object,coord)
 {
-  if (!inherits(object,"R4dfp"))
+  if (!is.R4dfp(object))
     stop("not a 4dfp image object")
 
   if (is.null(ncol(coord)))

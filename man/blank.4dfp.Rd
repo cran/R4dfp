@@ -1,7 +1,7 @@
-\name{blank.4dfp}
-\alias{blank.4dfp}
-\alias{blank.333.4dfp}
-\alias{blank.111.4dfp}
+\name{R4dfp.Blank}
+\alias{R4dfp.Blank}
+\alias{R4dfp.Blank333}
+\alias{R4dfp.Blank111}
 \title{Create a Blank 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -9,10 +9,10 @@ Snyder <avi@npg.wustl.edu>}
 Returns a loaded 4dfp MRI image, either loaded or memory-mapped.
 }
 \usage{
-blank.4dfp(file="",dims=c(1,1,1,1),scale=c(1,1,1),mmppix=c(1,-1,-1),
+R4dfp.Blank(file="",dims=c(1,1,1,1),scale=c(1,1,1),mmppix=c(1,-1,-1),
   center=c(0,0,0))
-blank.333.4dfp(file="",t=1)
-blank.111.4dfp(file="",t=1)
+R4dfp.Blank333(file="",t=1)
+R4dfp.Blank111(file="",t=1)
 }
 \arguments{
   \item{file}{
@@ -37,20 +37,16 @@ blank.111.4dfp(file="",t=1)
 \value{
 Object of class \sQuote{R4dfp}.
 }
-\details{
-}
 \examples{
 #create a new image and load it for direct writing
-myimage <- blank.333.4dfp("myimage.4dfp.ifh")
-myimage <- recycle.4dfp(myimage,direct.write=TRUE)
-}
-\references{
+myimage <- R4dfp.Blank333("myimage.4dfp.ifh")
+myimage <- R4dfp.Recycle(myimage,direct.write=TRUE)
 }
 \seealso{
-  \code{\link{save.4dfp}}
-  \code{\link{copy.4dfp}}
-  \code{\link{close.R4dfp}}
-  \code{\link{recycle.4dfp}}
+  \code{\link{R4dfp.Save}}
+  \code{\link{R4dfp.Copy}}
+  \code{\link{R4dfp.Close}}
+  \code{\link{R4dfp.Recycle}}
 }
 \keyword{utilities}
 \keyword{data}

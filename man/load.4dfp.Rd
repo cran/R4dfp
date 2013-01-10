@@ -1,8 +1,7 @@
-\name{load.4dfp}
-\alias{load.4dfp}
-\alias{print.R4dfp}
+\name{R4dfp.Load}
+\alias{R4dfp.Load}
+\alias{R4dfp.Print}
 \alias{is.4dfp}
-\alias{is.R4dfp}
 \title{Read a 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -10,10 +9,9 @@ Snyder <avi@npg.wustl.edu>}
 Returns a loaded 4dfp MRI image, either loaded or memory-mapped.
 }
 \usage{
-load.4dfp(file,direct.read=FALSE,direct.write=FALSE)
-print.R4dfp(x,...)
+R4dfp.Load(file,direct.read=FALSE,direct.write=FALSE)
+R4dfp.Print(x)
 is.4dfp(unknown)
-is.R4dfp(object)
 }
 \arguments{
   \item{file}{
@@ -33,12 +31,6 @@ is.R4dfp(object)
   An object to check for class \sQuote{R4dfp} or a string to check for 4dfp
   file-name format.
   }
-  \item{object}{
-  An object to check for class \sQuote{R4dfp}.
-  }
-  \item{...}{
-  Other things.
-  }
 }
 \value{
 Object of class \sQuote{R4dfp}.
@@ -46,10 +38,10 @@ Object of class \sQuote{R4dfp}.
 \details{
 The header/image file pair corresponding to the file-name given will be loaded.
 The object returned should not be copied directly with \code{<-} after the
-initial assignment; use \code{\link{copy.4dfp}} instead!
+initial assignment; use \code{\link{R4dfp.Copy}} instead!
 
 If \code{direct.read} or \code{direct.write} are specified, the header
-information cannot be edited. See \code{\link{recycle.4dfp}} for info about
+information cannot be edited. See \code{\link{R4dfp.Recycle}} for info about
 switching to a fully-editable copy. As these options imply, all changes made to
 the image will be written directly to the file, and all reads will be read from
 the file as it exists at the time of the read.
@@ -72,13 +64,13 @@ Voxel access is via the \code{[...]} operator:
   }
 }
 \examples{
-myimage <- blank.333.4dfp("myimage.4dfp.ifh")
-save.4dfp(myimage)
+myimage <- R4dfp.Blank333("myimage.4dfp.ifh")
+R4dfp.Save(myimage)
 
 #3 different ways to load an image
-myimage <- load.4dfp("myimage.4dfp.ifh")
-myimage <- load.4dfp("myimage.4dfp.ifh",direct.read=TRUE)
-myimage <- load.4dfp("myimage.4dfp.ifh",direct.write=TRUE)
+myimage <- R4dfp.Load("myimage.4dfp.ifh")
+myimage <- R4dfp.Load("myimage.4dfp.ifh",direct.read=TRUE)
+myimage <- R4dfp.Load("myimage.4dfp.ifh",direct.write=TRUE)
 
 #retrieve a 3x3x3 cube of voxels
 myimage[1:3,1:3,1:3,1]
@@ -97,13 +89,11 @@ myimage[,,,] <- array(rnorm(prod(myimage$dims)),myimage$dims)
 #set everything less than 0 to 0
 myimage[myimage[,,,]<0] <- 0
 }
-\references{
-}
 \seealso{
-  \code{\link{save.4dfp}}
-  \code{\link{copy.4dfp}}
-  \code{\link{close.R4dfp}}
-  \code{\link{recycle.4dfp}}
+  \code{\link{R4dfp.Save}}
+  \code{\link{R4dfp.Copy}}
+  \code{\link{R4dfp.Close}}
+  \code{\link{R4dfp.Recycle}}
 }
 \keyword{utilities}
 \keyword{data}

@@ -82,7 +82,7 @@
 #include "ifh.h"
 #include "endianio.h"
 
-#define MAXL	256
+#define MAXL	512
 
 static char	rcsid[] = "$Id: Getifh.c,v 1.21 2007/05/03 22:27:28 avi Exp $";
 void Getifh_rcs (void) {fprintf (stderr, "%s\n", rcsid);}
@@ -186,30 +186,31 @@ ERR:	if ((str = strrchr (parameter, '\n'))) *str = '\0';
 int Writeifh (char *program, char *outfile, IFH *ifhdr, char control) {
 	FILE		*ifhfp;
 	char		ifhfile[MAXL];
+	char 		imgfile[MAXL];
 	int		i, osbig;
 
 	osbig = (CPU_is_bigendian ()) ? !(control == 'l' || control == 'L') : (control == 'b' || control == 'B');
 
 	getroot (outfile, ifhfile);
+	strcpy (imgfile, ifhfile);
 	strcat (ifhfile, ".4dfp.ifh");
+	strcat (imgfile, ".4dfp.img");
 	if (!(ifhfp = fopen (ifhfile, "w"))) return -1;
-	fprintf (stderr, "Writing: %s\n", ifhfile);
-
 	fprintf (ifhfp, "INTERFILE	:=\n");
 	fprintf (ifhfp, "version of keys	:= %s\n", ifhdr->version_of_keys);
 	fprintf (ifhfp, "number format		:= %s\n", ifhdr->number_format);
 	fprintf (ifhfp, "conversion program	:= %s\n", program);
-	fprintf (ifhfp, "name of data file	:= %s\n", outfile);
+	fprintf (ifhfp, "name of data file	:= %s\n", imgfile);
 	fprintf (ifhfp, "number of bytes per pixel	:= %d\n", ifhdr->number_of_bytes_per_pixel);
 	fprintf (ifhfp, "imagedata byte order	:= %s\n", (osbig) ? "bigendian" : "littleendian");
 	fprintf (ifhfp, "orientation		:= %d\n", ifhdr->orientation);
 	fprintf (ifhfp, "number of dimensions	:= %d\n", ifhdr->number_of_dimensions);
-for (i = 0; i < 4; i++) {
-	fprintf (ifhfp, "matrix size [%d]	:= %d\n", i + 1, ifhdr->matrix_size[i]);
-}
-for (i = 0; i < 3; i++) {
-	fprintf (ifhfp, "scaling factor (mm/pixel) [%d]	:= %f\n", i + 1, ifhdr->scaling_factor[i]);
-}
+	for (i = 0; i < 4; i++) {
+		fprintf (ifhfp, "matrix size [%d]	:= %d\n", i + 1, ifhdr->matrix_size[i]);
+	}
+	for (i = 0; i < 3; i++) {
+		fprintf (ifhfp, "scaling factor (mm/pixel) [%d]	:= %f\n", i + 1, ifhdr->scaling_factor[i]);
+	}
 	fprintf (ifhfp, "mmppix	:= %10.6f%10.6f%10.6f\n", ifhdr->mmppix[0], ifhdr->mmppix[1], ifhdr->mmppix[2]);
 	fprintf (ifhfp, "center	:= %10.4f%10.4f%10.4f\n", ifhdr->center[0], ifhdr->center[1], ifhdr->center[2]);
 

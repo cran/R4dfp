@@ -1,5 +1,5 @@
-\name{coord.to.voxel.4dfp}
-\alias{coord.to.voxel.4dfp}
+\name{R4dfp.CoordToVoxel}
+\alias{R4dfp.CoordToVoxel}
 \title{Translate a Coordinate to a Voxel.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -7,7 +7,7 @@ Snyder <avi@npg.wustl.edu>}
 Translate a coordinate to a voxel for a specific 4dfp MRI image.
 }
 \usage{
-coord.to.voxel.4dfp(object,coord)
+R4dfp.CoordToVoxel(object,coord)
 }
 \arguments{
   \item{object}{
@@ -25,17 +25,15 @@ Finds the nearest voxel to the given coordinates. Image limits aren't checked.
 }
 \examples{
 #get the nearest voxel to the origin
-myimage <- blank.333.4dfp()
-voxel <- coord.to.voxel.4dfp(myimage,c(0,0,0))
-}
-\references{
+myimage <- R4dfp.Blank333()
+voxel <- R4dfp.CoordToVoxel(myimage,c(0,0,0))
 }
 \seealso{
-  \code{\link{voxel.to.coord.4dfp}}
-  \code{\link{load.4dfp}}
-  \code{\link{save.4dfp}}
-  \code{\link{close.R4dfp}}
-  \code{\link{recycle.4dfp}}
+  \code{\link{R4dfp.VoxelToCoord}}
+  \code{\link{R4dfp.Load}}
+  \code{\link{R4dfp.Save}}
+  \code{\link{R4dfp.Close}}
+  \code{\link{R4dfp.Recycle}}
 }
 \keyword{utilities}
 \keyword{data}

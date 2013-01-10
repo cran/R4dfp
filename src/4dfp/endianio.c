@@ -1,3 +1,4 @@
+/*Aaron B, Tanenbaum [9 Apr 2013] Altered writeifh to correct for the incorrect image filename 
 /*kevin p. barry [23 jun 2010] removed 'printf' for info messages*/
 /*kevin p. barry [21 jun 2010] removed <> for local includes*/
 

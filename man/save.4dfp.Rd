@@ -1,5 +1,5 @@
-\name{save.4dfp}
-\alias{save.4dfp}
+\name{R4dfp.Save}
+\alias{R4dfp.Save}
 \title{Write a 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -7,7 +7,7 @@ Snyder <avi@npg.wustl.edu>}
 Attempts to write a 4dfp MRI image.
 }
 \usage{
-save.4dfp(object)
+R4dfp.Save(object)
 }
 \arguments{
   \item{object}{
@@ -22,13 +22,11 @@ Attempts to save the specified 4dfp image using the header name in
 \code{object$file}. Images loaded using \code{direct.read} or
 \code{direct.write} can't be saved.
 }
-\references{
-}
 \seealso{
-  \code{\link{load.4dfp}}
-  \code{\link{copy.4dfp}}
-  \code{\link{close.R4dfp}}
-  \code{\link{recycle.4dfp}}
+  \code{\link{R4dfp.Load}}
+  \code{\link{R4dfp.Copy}}
+  \code{\link{R4dfp.Close}}
+  \code{\link{R4dfp.Recycle}}
 }
 \keyword{utilities}
 \keyword{data}

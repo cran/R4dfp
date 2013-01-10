@@ -1,5 +1,5 @@
-\name{recycle.4dfp}
-\alias{recycle.4dfp}
+\name{R4dfp.Recycle}
+\alias{R4dfp.Recycle}
 \title{Reload a 4dfp MRI Image.}
 \author{Kevin P. Barry <ta0kira@users.berlios.de> with contributions from Avi Z.
 Snyder <avi@npg.wustl.edu>}
@@ -7,7 +7,7 @@ Snyder <avi@npg.wustl.edu>}
 Reloads a loaded 4dfp MRI image with different options.
 }
 \usage{
-recycle.4dfp(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
+R4dfp.Recycle(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
 }
 \arguments{
   \item{object}{
@@ -18,10 +18,10 @@ recycle.4dfp(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
   \code{direct.write} weren't used for the old image.
   }
   \item{direct.read}{
-  Pass \code{direct.read} to \code{\link{load.4dfp}} when reopening.
+  Pass \code{direct.read} to \code{\link{R4dfp.Load}} when reopening.
   }
   \item{direct.write}{
-  Pass \code{direct.write} to \code{\link{load.4dfp}} when reopening.
+  Pass \code{direct.write} to \code{\link{R4dfp.Load}} when reopening.
   }
 }
 \value{
@@ -38,16 +38,14 @@ direct access to the image file.
 }
 \examples{
 #create an image and reload it with direct writing
-myimage <- blank.333.4dfp("newimage.4dfp.ifh")
-myimage <- recycle.4dfp(myimage,direct.write=TRUE)
-}
-\references{
+myimage <- R4dfp.Blank333("newimage.4dfp.ifh")
+myimage <- R4dfp.Recycle(myimage,direct.write=TRUE)
 }
 \seealso{
-  \code{\link{load.4dfp}}
-  \code{\link{save.4dfp}}
-  \code{\link{copy.4dfp}}
-  \code{\link{close.R4dfp}}
+  \code{\link{R4dfp.Load}}
+  \code{\link{R4dfp.Save}}
+  \code{\link{R4dfp.Copy}}
+  \code{\link{R4dfp.Close}}
 }
 \keyword{utilities}
 \keyword{data}

@@ -1,6 +1,6 @@
 # Kevin P. Barry [ta0kira@users.berlios.de], BMCLAB, 23 Jun 2010
 
-load.4dfp <- function(file,direct.read=FALSE,direct.write=FALSE)
+R4dfp.Load <- function(file,direct.read=FALSE,direct.write=FALSE)
 {
   direct.read <- direct.read||direct.write
   new.image <- .Call("load_4dfp",as.character(file),as.integer(direct.read),as.integer(direct.write),PACKAGE="R4dfp")
@@ -11,30 +11,58 @@ load.4dfp <- function(file,direct.read=FALSE,direct.write=FALSE)
   return(new.image)
 }
 
-
-save.4dfp <- function(object)
+R4dfp.Print <- function(x)
 {
-  if (!is.R4dfp(object))
+  if (!inherits(x,"R4dfp"))
+    stop("not a 4dfp image object")
+
+  print(list(
+    file=x$file,
+    dims=x$dims,
+    scale=x$scale,
+    mmppix=x$mmppix,
+    center=x$center))
+
+  if (!is.null(x$direct.read))
+    print(list(direct.read=x$direct.read))
+
+  if (!is.null(x$direct.write))
+    print(list(direct.write=x$direct.write))
+}
+
+
+is.4dfp <- function(unknown)
+{
+  if (inherits(unknown,"R4dfp"))
+    return(TRUE) else
+  if (is.character(unknown))
+    return(length(grep('\\.4dfp(\\.ifh|\\.img|)$',unknown))>0) else
+    return(FALSE)
+}
+
+R4dfp.Save <- function(object)
+{
+  if (!inherits(object,"R4dfp"))
     stop("not a 4dfp image object")
 
   .Call("save_4dfp",object,PACKAGE="R4dfp")
 }
 
 
-recycle.4dfp <- function(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
+R4dfp.Recycle <- function(object,save=TRUE,direct.read=FALSE,direct.write=FALSE)
 {
-  if (!is.R4dfp(object))
+  if (!inherits(object,"R4dfp"))
     stop("not a 4dfp image object")
 
   file <- object$file
-  close.R4dfp(object,save=save)
-  return(load.4dfp(file,direct.read=direct.read,direct.write=direct.write))
+  R4dfp.Close(object,save=save)
+  return(R4dfp.Load(file,direct.read=direct.read,direct.write=direct.write))
 }
 
 
-copy.4dfp <- function(object,file="")
+R4dfp.Copy <- function(object,file="")
 {
-  if (!is.R4dfp(object))
+  if (!inherits(object,"R4dfp"))
     stop("not a 4dfp image object")
 
   new.image <- .Call("blank_4dfp",PACKAGE="R4dfp")
@@ -50,7 +78,7 @@ copy.4dfp <- function(object,file="")
 }
 
 
-blank.4dfp <- function(file="",dims=c(1,1,1,1),scale=c(1,1,1),mmppix=c(1,-1,-1),center=c(0,0,0))
+R4dfp.Blank <- function(file="",dims=c(1,1,1,1),scale=c(1,1,1),mmppix=c(1,-1,-1),center=c(0,0,0))
 {
   new.image <- .Call("blank_4dfp",PACKAGE="R4dfp")
   names(new.image) <- c("internal","file","dims","scale","mmppix","center")
@@ -67,19 +95,27 @@ blank.4dfp <- function(file="",dims=c(1,1,1,1),scale=c(1,1,1),mmppix=c(1,-1,-1),
 }
 
 
-blank.333.4dfp <- function(file="",t=1)
+R4dfp.Blank333 <- function(file="",t=1)
 {
-  return(blank.4dfp(file=file,dims=c(48,64,48,t),scale=c(3,3,3),mmppix=c(3,-3,-3),center=c(73.5,-87,-84)))
+  return(R4dfp.Blank(file=file,dims=c(48,64,48,t),scale=c(3,3,3),mmppix=c(3,-3,-3),center=c(73.5,-87,-84)))
 }
 
 
-blank.111.4dfp <- function(file="",t=1)
+R4dfp.Blank111 <- function(file="",t=1)
 {
-  return(blank.4dfp(file=file,dims=c(176,208,176,t),scale=c(1,1,1),mmppix=c(1,-1,-1),center=c(89,-85,-101)))
+  return(R4dfp.Blank(file=file,dims=c(176,208,176,t),scale=c(1,1,1),mmppix=c(1,-1,-1),center=c(89,-85,-101)))
 }
 
 
-voxels.4dfp <- function(mask,dims)
+R4dfp.Close <- function(object,save=FALSE)
+{
+	if (!inherits(object,"R4dfp"))
+		stop("not a 4dfp image object")
+	.Call("close_4dfp",object,save,PACKAGE="R4dfp")
+	return(object)
+}
+
+voxels_4dfp <- function(mask,dims)
 {
   linear <- which(mask)
 
@@ -97,11 +133,47 @@ voxels.4dfp <- function(mask,dims)
     )+1)
 }
 
+R4dfp.VoxelToCoord <- function(object,voxel)
+{
+  if (!inherits(object,"R4dfp"))
+    stop("not a 4dfp image object")
+
+  if (is.null(ncol(voxel)))
+    voxel <- floor(as.matrix(t(voxel[1:3]))) else
+    voxel <- floor(as.matrix(voxel[,1:3]))
+
+  expand <- as.matrix(array(1,c(nrow(voxel),1)))
+
+  center <- expand%*%t(object$center)
+  scale  <- expand%*%t(object$scale[1:3])
+  center[,3] <- center[,3]+scale[3]*object$dims[3]
+  return((center-(voxel-1)*expand%*%c(1,-1,1)*scale)*expand%*%c(1,-1,-1)-scale/2)
+}
+
+
+R4dfp.CoordToVoxel <- function(object,coord)
+{
+  if (!inherits(object,"R4dfp"))
+    stop("not a 4dfp image object")
+
+  if (is.null(ncol(coord)))
+    coord <- as.matrix(t(coord[1:3])) else
+    coord <- as.matrix(coord[,1:3])
+
+  expand <- as.matrix(array(1,c(nrow(coord),1)))
+
+  center <- expand%*%as.matrix(t(object$center))
+  scale  <- expand%*%as.matrix(t(object$scale[1:3]))
+  center[,3] <- center[,3]+scale[3]*object$dims[3]
+  return(round((center-(coord+scale/2)*expand%*%c(1,-1,-1))*expand%*%c(1,-1,1)/scale)+1)
+}
+
+
 
 "[.R4dfp" <- function(object,X=1:object$dims[1],Y=1:object$dims[2],Z=1:object$dims[3],t=1:object$dims[4])
 {
   if ((length(dim(X)==3)||length(dim(X)==4))&&is.logical(X))
-    X <- voxels.4dfp(X,dim(X))
+    X <- voxels_4dfp(X,dim(X))
 
   image.data <- .Call("read_voxels_4dfp",object,X-1,Y-1,Z-1,t-1,PACKAGE="R4dfp")
 
@@ -120,7 +192,7 @@ voxels.4dfp <- function(mask,dims)
 "[<-.R4dfp" <- function(object,X=1:object$dims[1],Y=1:object$dims[2],Z=1:object$dims[3],t=1:object$dims[4],value)
 {
   if ((length(dim(X)==3)||length(dim(X)==4))&&is.logical(X))
-    X <- voxels.4dfp(X,dim(X))
+    X <- voxels_4dfp(X,dim(X))
 
   if (length(value)!=1)
   {
@@ -140,7 +212,7 @@ voxels.4dfp <- function(mask,dims)
     }
   }
 
-  .Call("write_voxels_4dfp",object,X-1,Y-1,Z-1,t-1,as.vector(as.real(value)),PACKAGE="R4dfp")
+  .Call("write_voxels_4dfp",object,X-1,Y-1,Z-1,t-1,as.vector(as.numeric(value)),PACKAGE="R4dfp")
 }
 
 
@@ -177,88 +249,3 @@ voxels.4dfp <- function(mask,dims)
   return(object)
 }
 
-
-is.4dfp <- function(unknown)
-{
-  if (is.R4dfp(unknown))
-    return(TRUE) else
-  if (is.character(unknown))
-    return(length(grep('\\.4dfp(\\.ifh|\\.img|)$',unknown))>0) else
-    return(FALSE)
-}
-
-
-is.R4dfp <- function(object)
-{
-  return(inherits(object,"R4dfp"))
-}
-
-
-print.R4dfp <- function(x,...)
-{
-  if (!inherits(x,"R4dfp"))
-    stop("not a 4dfp image object")
-
-  print(list(
-    file=x$file,
-    dims=x$dims,
-    scale=x$scale,
-    mmppix=x$mmppix,
-    center=x$center))
-
-  if (!is.null(x$direct.read))
-    print(list(direct.read=x$direct.read))
-
-  if (!is.null(x$direct.write))
-    print(list(direct.write=x$direct.write))
-}
-
-
-close.R4dfp <- function(con,...)
-{
-  if (!inherits(con,"R4dfp"))
-    stop("not a 4dfp image object")
-
-  if (is.null(list(...)$save))
-    save <- FALSE
-  else
-    save <- list(...)$save
-
-  .Call("close_4dfp",con,as.logical(save),PACKAGE="R4dfp")
-}
-
-
-voxel.to.coord.4dfp <- function(object,voxel)
-{
-  if (!is.R4dfp(object))
-    stop("not a 4dfp image object")
-
-  if (is.null(ncol(voxel)))
-    voxel <- floor(as.matrix(t(voxel[1:3]))) else
-    voxel <- floor(as.matrix(voxel[,1:3]))
-
-  expand <- as.matrix(array(1,c(nrow(voxel),1)))
-
-  center <- expand%*%t(object$center)
-  scale  <- expand%*%t(object$scale[1:3])
-  center[,3] <- center[,3]+scale[3]*object$dims[3]
-  return((center-(voxel-1)*expand%*%c(1,-1,1)*scale)*expand%*%c(1,-1,-1)-scale/2)
-}
-
-
-coord.to.voxel.4dfp <- function(object,coord)
-{
-  if (!is.R4dfp(object))
-    stop("not a 4dfp image object")
-
-  if (is.null(ncol(coord)))
-    coord <- as.matrix(t(coord[1:3])) else
-    coord <- as.matrix(coord[,1:3])
-
-  expand <- as.matrix(array(1,c(nrow(coord),1)))
-
-  center <- expand%*%as.matrix(t(object$center))
-  scale  <- expand%*%as.matrix(t(object$scale[1:3]))
-  center[,3] <- center[,3]+scale[3]*object$dims[3]
-  return(round((center-(coord+scale/2)*expand%*%c(1,-1,-1))*expand%*%c(1,-1,1)/scale)+1)
-}

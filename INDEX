@@ -1,0 +1,10 @@
+R4dfp.Blank              Create a Blank 4dfp MRI Image.
+R4dfp.Close              Close a 4dfp MRI Image.
+R4dfp.CoordToVoxel     Translate a Coordinate to a Voxel.
+R4dfp.Copy               Copy a Loaded 4dfp MRI Image.
+R4dfp.Load               Read a 4dfp MRI Image.
+R4dfp.Recycle            Reload a 4dfp MRI Image.
+R4dfp.Save               Write a 4dfp MRI Image.
+R4dfp.VoxelToCoord     Translate a Voxel to a Coordinate.
+R4dpf.Print             Display the properties of the image	
+is.4dfp                 checks to see if object is R4dfp 

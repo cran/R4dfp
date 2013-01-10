@@ -1,19 +1,18 @@
 useDynLib(R4dfp)
 
 export(
-  load.4dfp,
-  save.4dfp,
-  recycle.4dfp,
-  copy.4dfp,
-  blank.4dfp,
-  blank.333.4dfp,
-  blank.111.4dfp,
+  R4dfp.Close,
+  R4dfp.Load,
+  R4dfp.Save,
+  R4dfp.Recycle,
+  R4dfp.Copy,
+  R4dfp.Blank,
+  R4dfp.Blank333,
+  R4dfp.Blank111,
   is.4dfp,
-  is.R4dfp,
-  print.R4dfp,
-  close.R4dfp,
-  voxel.to.coord.4dfp,
-  coord.to.voxel.4dfp)
+  R4dfp.Print,
+  R4dfp.VoxelToCoord,
+  R4dfp.CoordToVoxel)
 
 S3method('[',R4dfp)
 S3method('[<-',R4dfp)
